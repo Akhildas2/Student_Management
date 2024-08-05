@@ -1,0 +1,106 @@
+/* src/css/style.css */
+
+/* Container for the student list and the "Add New Student" button */
+.student-list-container {
+  position: relative;
+  padding: 20px;
+}
+
+/* Heading styling */
+.student-list-container h1 {
+  margin: 0;
+  padding-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Button styling */
+.add-student-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 10; /* Ensure button is above other elements */
+}
+
+.add-student-button:hover {
+  background-color: #45a049;
+}
+
+.student-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding-top: 20px;
+  justify-content: center; /* Center the student cards */
+}
+
+.student-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  width: calc(33.333% - 20px); /* Adjust based on the number of cards per row */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.student-card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto;
+}
+
+.student-card .student-info {
+  text-align: center;
+}
+
+.edit-button,
+.delete-button {
+  margin: 5px;
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-button {
+  background-color: #2196F3;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #0b7dda;
+}
+
+.delete-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #da190b;
+}
+
+/* Optional: Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .student-card {
+    width: calc(50% - 20px); /* Two cards per row on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .student-card {
+    width: calc(100% - 20px); /* One card per row on very small screens */
+  }
+}
