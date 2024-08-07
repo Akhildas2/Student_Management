@@ -3,20 +3,23 @@ import { StudentService } from "../services/studentService";
 import { StudentForm } from "./studentForm";
 
 export class StudentList {
-  private studentService: StudentService;
+  private studentService: StudentService; // Service for handling student data operations
 
   constructor(studentService: StudentService) {
     this.studentService = studentService;
   }
 
+  // Method to render the student list
   async render() {
     try {
       const students: Student[] = await this.studentService.getStudents();
       let listHtml = '<div class="student-list-container">';
       listHtml += '<h1>Student List</h1>';
       listHtml += '<button id="addStudent" class="add-student-button">Add New Student</button>';
+      listHtml += '<div id="formContainer"></div>'; // Container for the form
       listHtml += '<div class="student-list">';
 
+      // Loop through the students and create HTML for each student card
       students.forEach(student => {
         const imageUrl = student.photo || 'https://via.placeholder.com/150';
 
@@ -36,8 +39,9 @@ export class StudentList {
       listHtml += '</div>'; // Close student-list div
       listHtml += '</div>'; // Close student-list-container div
 
-      document.body.innerHTML = listHtml; // Replace existing content
+      document.body.innerHTML = listHtml; // Replace existing content with the student list
 
+      // Attach editStudent function to the window object for global access
       (window as any).editStudent = (id: number) => {
         const studentCard = document.getElementById(`student-card-${id}`);
         if (studentCard) {
@@ -48,6 +52,7 @@ export class StudentList {
         }
       };
 
+      // Attach deleteStudent function to the window object for global access
       (window as any).deleteStudent = async (id: number) => {
         try {
           await this.studentService.deleteStudent(id);
@@ -60,6 +65,7 @@ export class StudentList {
         }
       };
 
+      // Add event listener to the Add New Student button
       (document.getElementById('addStudent') as HTMLButtonElement)?.addEventListener('click', () => {
         this.renderAddStudentForm();
       });
@@ -70,20 +76,16 @@ export class StudentList {
     }
   }
 
+  // Method to render the form for adding a new student
   private renderAddStudentForm() {
     const formContainer = document.getElementById('formContainer');
     if (formContainer) {
-      formContainer.remove();
+      formContainer.innerHTML = ''; // Clear any existing form content
+      new StudentForm(this.studentService, undefined, this.addStudentCard.bind(this), formContainer).render(); // Without ID to add a new student
     }
-
-    const newFormContainer = document.createElement('div');
-    newFormContainer.id = 'formContainer';
-    document.body.appendChild(newFormContainer);
-
-    new StudentForm(this.studentService, undefined, this.addStudentCard.bind(this), newFormContainer).render(); // Without ID to add a new student
   }
 
-  // Callback to update student card
+  // Callback to update student card after editing
   updateStudentCard(student: Student) {
     const studentCard = document.getElementById(`student-card-${student.id}`);
     if (studentCard) {
@@ -101,7 +103,7 @@ export class StudentList {
     }
   }
 
-  // Callback to add student card
+  // Callback to add a new student card after creating
   addStudentCard(student: Student) {
     const imageUrl = student.photo || 'https://via.placeholder.com/150';
     const studentCardHtml = `
@@ -118,13 +120,13 @@ export class StudentList {
 
     const studentList = document.querySelector('.student-list');
     if (studentList) {
-      studentList.innerHTML += studentCardHtml;
+      studentList.innerHTML += studentCardHtml; // Adding new student
     }
 
     // Clean up the form
     const formContainer = document.getElementById('formContainer');
     if (formContainer) {
-      formContainer.remove();
+      formContainer.innerHTML = '';
     }
   }
 }

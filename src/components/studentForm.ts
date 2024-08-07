@@ -2,15 +2,15 @@ import { Student } from "../models/student";
 import { StudentService } from "../services/studentService";
 
 export class StudentForm {
-  private studentService: StudentService;
-  private studentId?: number;
-  private callback: (student: Student) => void;
-  private container?: HTMLElement;
+  private studentService: StudentService; // Service for handling student data operations
+  private studentId?: number; // Optional student ID for editing an existing student
+  private callback: (student: Student) => void; // Callback function to be executed after form submission
+  private container?: HTMLElement; // Optional container element for the form
 
   constructor(
     studentService: StudentService,
     studentId?: number,
-    callback: (student: Student) => void = () => {},
+    callback: (student: Student) => void = () => { },
     container?: HTMLElement
   ) {
     this.studentService = studentService;
@@ -19,9 +19,11 @@ export class StudentForm {
     this.container = container;
   }
 
+  // Method to render the form
   async render() {
     const student = this.studentId ? await this.studentService.getStudent(this.studentId) : null;
 
+    // HTML structure for the form
     let formHtml = `
       <form id="studentForm">
         <input type="text" id="name" placeholder="Name" required value="${student?.name || ''}" />
@@ -31,6 +33,7 @@ export class StudentForm {
       </form>
     `;
 
+    // Rendering the form in the specified container or creating a new container
     if (this.container) {
       this.container.innerHTML = formHtml;
     } else {
@@ -45,6 +48,7 @@ export class StudentForm {
       }
     }
 
+    // Adding an event listener to handle form submission
     const form = document.getElementById('studentForm') as HTMLFormElement;
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -63,10 +67,12 @@ export class StudentForm {
           student.id = newStudent.id; // Ensure the new student has the correct ID
         }
 
+        // Execute the callback function if provided
         if (this.callback) {
           this.callback(student);
         }
 
+        // Clear the form or remove the form container
         if (this.container) {
           this.container.innerHTML = '';
         } else {
