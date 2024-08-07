@@ -1,4 +1,3 @@
-// src/components/studentList.ts
 import { Student } from "../models/student";
 import { StudentService } from "../services/studentService";
 import { StudentForm } from "./studentForm";
@@ -62,13 +61,26 @@ export class StudentList {
       };
 
       (document.getElementById('addStudent') as HTMLButtonElement)?.addEventListener('click', () => {
-        new StudentForm(this.studentService, undefined, this.addStudentCard.bind(this)).render(); // Without ID to add a new student
+        this.renderAddStudentForm();
       });
 
     } catch (error) {
       console.error(`Failed to load student list: ${error}`);
       document.body.innerHTML += `<p>Failed to load student list.</p>`;
     }
+  }
+
+  private renderAddStudentForm() {
+    const formContainer = document.getElementById('formContainer');
+    if (formContainer) {
+      formContainer.remove();
+    }
+
+    const newFormContainer = document.createElement('div');
+    newFormContainer.id = 'formContainer';
+    document.body.appendChild(newFormContainer);
+
+    new StudentForm(this.studentService, undefined, this.addStudentCard.bind(this), newFormContainer).render(); // Without ID to add a new student
   }
 
   // Callback to update student card
@@ -107,6 +119,12 @@ export class StudentList {
     const studentList = document.querySelector('.student-list');
     if (studentList) {
       studentList.innerHTML += studentCardHtml;
+    }
+
+    // Clean up the form
+    const formContainer = document.getElementById('formContainer');
+    if (formContainer) {
+      formContainer.remove();
     }
   }
 }

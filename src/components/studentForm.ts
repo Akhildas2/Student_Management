@@ -1,4 +1,3 @@
-// src/components/studentForm.ts
 import { Student } from "../models/student";
 import { StudentService } from "../services/studentService";
 
@@ -35,7 +34,15 @@ export class StudentForm {
     if (this.container) {
       this.container.innerHTML = formHtml;
     } else {
-      document.body.innerHTML += `<div id="formContainer">${formHtml}</div>`;
+      const existingFormContainer = document.getElementById('formContainer');
+      if (existingFormContainer) {
+        existingFormContainer.innerHTML = formHtml;
+      } else {
+        const newFormContainer = document.createElement('div');
+        newFormContainer.id = 'formContainer';
+        newFormContainer.innerHTML = formHtml;
+        document.body.appendChild(newFormContainer);
+      }
     }
 
     const form = document.getElementById('studentForm') as HTMLFormElement;
