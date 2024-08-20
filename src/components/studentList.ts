@@ -8,7 +8,6 @@ export class StudentList {
   constructor(studentService: StudentService) {
     this.studentService = studentService;
   }
-
   // Method to render the student list
   async render() {
     try {
@@ -16,9 +15,8 @@ export class StudentList {
       let listHtml = '<div class="student-list-container">';
       listHtml += '<h1>Student List</h1>';
       listHtml += '<button id="addStudent" class="add-student-button">Add New Student</button>';
-      listHtml += '<div id="formContainer"></div>'; // Container for the form
+      listHtml += '<div id="formContainer"></div>';
       listHtml += '<div class="student-list">';
-
       // Loop through the students and create HTML for each student card
       students.forEach(student => {
         const imageUrl = student.photo || 'https://via.placeholder.com/150';
@@ -36,13 +34,13 @@ export class StudentList {
           </div>`;
       });
 
-      listHtml += '</div>'; // Close student-list div
-      listHtml += '</div>'; // Close student-list-container div
+      listHtml += '</div>';
+      listHtml += '</div>';
 
-      document.body.innerHTML = listHtml; // Replace existing content with the student list
-
+      document.body.innerHTML = listHtml;
       // Attach editStudent function to the window object for global access
       (window as any).editStudent = (id: number) => {
+        console.log(`Editing student with ID: ${id}`);
         const studentCard = document.getElementById(`student-card-${id}`);
         if (studentCard) {
           const studentInfo = studentCard.querySelector('.student-info');
@@ -51,7 +49,6 @@ export class StudentList {
           }
         }
       };
-
       // Attach deleteStudent function to the window object for global access
       (window as any).deleteStudent = async (id: number) => {
         try {
@@ -64,27 +61,23 @@ export class StudentList {
           alert(`Error: ${error}`);
         }
       };
-
       // Add event listener to the Add New Student button
       (document.getElementById('addStudent') as HTMLButtonElement)?.addEventListener('click', () => {
         this.renderAddStudentForm();
       });
 
     } catch (error) {
-      console.error(`Failed to load student list: ${error}`);
       document.body.innerHTML += `<p>Failed to load student list.</p>`;
     }
   }
-
   // Method to render the form for adding a new student
   private renderAddStudentForm() {
     const formContainer = document.getElementById('formContainer');
     if (formContainer) {
-      formContainer.innerHTML = ''; // Clear any existing form content
-      new StudentForm(this.studentService, undefined, this.addStudentCard.bind(this), formContainer).render(); // Without ID to add a new student
+      formContainer.innerHTML = '';
+      new StudentForm(this.studentService, undefined, this.addStudentCard.bind(this), formContainer).render();
     }
   }
-
   // Callback to update student card after editing
   updateStudentCard(student: Student) {
     const studentCard = document.getElementById(`student-card-${student.id}`);
@@ -102,7 +95,6 @@ export class StudentList {
       `;
     }
   }
-
   // Callback to add a new student card after creating
   addStudentCard(student: Student) {
     const imageUrl = student.photo || 'https://via.placeholder.com/150';
